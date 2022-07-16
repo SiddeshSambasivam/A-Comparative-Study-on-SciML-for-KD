@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# additional packages
+pkgs/
+
+# Model Checkpoints
+*.ckpt
