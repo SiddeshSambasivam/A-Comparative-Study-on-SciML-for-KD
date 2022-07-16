@@ -82,6 +82,10 @@ class AIFeynman(BaseSymbolicModel):
             max_time=self.max_time,
         )
 
+    def reinitialize_model(self) -> None:
+        self._model = self.init_model()
+        self._is_fit = False
+
     def fit(self, x, y):
         """Trains the model on the given data."""
 

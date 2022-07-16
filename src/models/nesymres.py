@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 PredictedFunction = namedtuple("PredictedFunction", ["func", "equation"])
 PreprocessedInput = namedtuple("PreprocessedInput", ["x_dict", "x", "y"])
 
+
 class NeSymRes(BaseSymbolicModel):
     def __init__(
         self, checkpoint_path: str, config_path: str, equation_settings_path: str
@@ -78,7 +79,9 @@ class NeSymRes(BaseSymbolicModel):
             )
 
     def init_model(self) -> None:
-        model = Model.load_from_checkpoint(self.checkpoint_path, cfg=self.cfg.architecture)
+        model = Model.load_from_checkpoint(
+            self.checkpoint_path, cfg=self.cfg.architecture
+        )
 
         model.eval()
         if torch.cuda.is_available():
@@ -86,17 +89,25 @@ class NeSymRes(BaseSymbolicModel):
 
         return model
 
-    def preprocess_x(self, x: np.ndarray, scaled: bool = True, return_var_dict:bool=True) -> torch.tensor:
+    def reinitialize_model(self) -> None:
+        pass
+
+    def preprocess_x(
+        self, x: np.ndarray, scaled: bool = True, return_var_dict: bool = True
+    ) -> torch.tensor:
         n_variables = min(3, x.shape[1])
         max_supp = self.cfg.dataset_train.fun_support["max"]
         min_supp = self.cfg.dataset_train.fun_support["min"]
         total_variables = len(self.eq_setting["total_variables"])
-        
+
         X = torch.hstack(
-            (torch.from_numpy(x), torch.zeros(x.shape[0], total_variables - n_variables))
+            (
+                torch.from_numpy(x),
+                torch.zeros(x.shape[0], total_variables - n_variables),
+            )
         )
 
-        X[:,n_variables:] = 0
+        X[:, n_variables:] = 0
         try:
             assert X.shape[1] == 3, "X should consist of 3 input variables"
         except AssertionError as e:
@@ -109,8 +120,8 @@ class NeSymRes(BaseSymbolicModel):
         X_dict = None
         if return_var_dict:
             X_dict = {
-               x: X[:, idx].cpu()
-               for idx, x in enumerate(self.eq_setting["total_variables"])
+                x: X[:, idx].cpu()
+                for idx, x in enumerate(self.eq_setting["total_variables"])
             }
 
         return X, X_dict

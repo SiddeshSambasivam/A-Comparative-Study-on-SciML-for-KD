@@ -29,6 +29,10 @@ class BaseSymbolicModel(ABC):
         """Returns the equation of the model."""
         raise NotImplementedError
 
+    @abstractmethod
+    def reinitialize_model(self) -> None:
+        raise NotImplementedError
+
     def score(self, x, y):
         """Computes the accuracy of the model on the given data."""
 

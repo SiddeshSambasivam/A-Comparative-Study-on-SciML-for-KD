@@ -25,6 +25,10 @@ class DSR(BaseSymbolicModel):
 
         return get_dso_model(config_path)
 
+    def reinitialize_model(self) -> None:
+        self._model = self.init_model(self.config_path)
+        self._is_fit = False
+
     def predict(self, x: np.ndarray) -> np.ndarray:
         """Predicts the output for the given input."""
 

@@ -35,9 +35,12 @@ class Dataset:
         equations: List of equations.
     """
 
-    def __init__(self, equations: List[Equation], noise: float = 0.0) -> None:
+    def __init__(
+        self, equations: List[Equation], noise: float = 0.0, num_points: int = None
+    ) -> None:
         self.equations = equations
         self.noise = noise
+        self.num_points = num_points
 
     @staticmethod
     def evaluate_func(eq: Equation, X: np.ndarray):
@@ -64,7 +67,12 @@ class Dataset:
 
             y = equation.code(*x.T)
 
-            generated_noise = np.random.normal(0, self.noise, equation.number_of_points)
+            if self.num_points is None:
+                num_pts = self.num_points
+            else:
+                num_pts = equation.number_of_points
+
+            generated_noise = np.random.normal(0, self.noise, num_pts)
             y += generated_noise
 
             equation.x = x

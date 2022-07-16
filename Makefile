@@ -38,11 +38,29 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
-feynman:
-	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise)
+feynman-aif:
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m aifeynman
 
-nguyen:
-	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/
+feynman-gpl:
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m gplearn
 
-sanity_check:
-	python -m src.benchmark -d data/sanity_check/sanity_data.csv -n $(noise)
+feynman-dsr:
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m dsr
+
+feynman-nesymres:
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m nesymres
+
+nguyen-aif:
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m aifeynman
+
+nguyen-gpl:
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m gplearn
+
+nguyen-dsr:
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m dsr
+
+nguyen-nesymres:
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m nesymres
+
+sanity-check:
+	python -m src.benchmark -d data/sanity_check/sanity_data.csv -n $(noise) -o logs/sanity_check/ -m $(model)

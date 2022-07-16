@@ -54,6 +54,12 @@ class Gplearn(BaseSymbolicModel):
 
         return get_gplearn_model(*args, **kwargs)
 
+    def reinitialize_model(self) -> None:
+        """Reinitializes the model."""
+
+        self._model = self.init_model(*self.args[0], **self.args[1])
+        self._is_fit = False
+
     def predict(self, x: np.ndarray) -> np.ndarray:
         """Predicts the output for the given input."""
 

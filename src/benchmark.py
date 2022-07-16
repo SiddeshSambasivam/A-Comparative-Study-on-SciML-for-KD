@@ -1,3 +1,4 @@
+from collections import namedtuple
 import os
 import time
 import logging
@@ -22,9 +23,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ExperimentConfig:
     model_name: str
-    dataset_path: str
-    results_path: str
     hyper_parameter: str
+    dataset_path: str = field(init=False)
+    results_path: str = field(init=False)
 
 
 @dataclass
@@ -36,6 +37,9 @@ class ExperimentResults:
     hyper_parameter: str
     accuracy: float = field(init=False)
     time: float = field(init=False)  # in seconds
+
+
+ModelWithConfig = namedtuple("ModelWithConfig", ["model", "config"])
 
 
 class ExperimentRunner:
@@ -56,12 +60,7 @@ class ExperimentRunner:
         logging.basicConfig(level=logging.info)
         for i, equation in enumerate(self.dataset):
 
-            # self.model._model = self.model.init_model(
-            # *self.model.args[0], **self.model.args[1]
-            # )
-            self.model._model = self.model.init_model()
-
-            # self.model._model = self.model.init_model(self.model.config_path)
+            self.model.reinitialize_model()
 
             logger.info(f"Running experiment for equation {i+1}")
 
@@ -81,7 +80,6 @@ class ExperimentRunner:
             result.time = end - start
             result.predicted_equation = self.model.equation()
 
-            # convert result to dict and append to logs
             self.logs.append(result.__dict__)
 
     def write_results(self):
@@ -116,16 +114,34 @@ class ExperimentRunner:
         writer.save()
 
 
-def get_model(model_name: str):
+def get_model(model_name: str) -> ModelWithConfig:
     """Loads the model with the given name."""
     if model_name == "gplearn":
-        return Gplearn(FUNCTION_SET)
+        config = ExperimentConfig("gplearn", "Tournament size=10")
+        model = Gplearn(function_set=FUNCTION_SET, tournament_size=10, verbose=1)
+
     elif model_name == "dsr":
-        return DSR()
+        config = ExperimentConfig("dsr", "Epochs=128")
+        model = DSR("configs/dsr_config.json")
+
     elif model_name == "aifeynman":
-        return AIFeynman()
+        config = ExperimentConfig("AIF", "Epochs=10")
+        model = AIFeynman(
+            "add,sub,mul,div,sin,cos,exp,log", NN_epochs=1, max_time=60, BF_try_time=5
+        )
+
+    elif model_name == "nesymres":
+        model = NeSymRes(
+            "configs/NeSymRes/100M.ckpt",
+            "configs/NeSymRes/config.yaml",
+            "configs/NeSymRes/eq_setting.json",
+        )
+        config = ExperimentConfig("NeSymRes", "Beam size=2; BFGS Activated")
+
     else:
         raise ValueError(f"Unknown model name: {model_name}")
+
+    return ModelWithConfig(model, config)
 
 
 def load_config(config_path: str):
@@ -144,6 +160,13 @@ def load_config(config_path: str):
     required=True,
 )
 @click.option(
+    "--model-name",
+    "-m",
+    type=str,
+    help="Name of the model to use. Possible values: gplearn, dsr, aifeynman, nesymres",
+    required=True,
+)
+@click.option(
     "--noise",
     "-n",
     type=float,
@@ -157,7 +180,7 @@ def load_config(config_path: str):
     help="Path to the output directory",
     default="logs/",
 )
-def main(data_path: str, noise: float, output_path:str) -> None:
+def main(data_path: str, model_name: str, noise: float, output_path: str) -> None:
 
     start = time.time()
 
@@ -174,28 +197,18 @@ def main(data_path: str, noise: float, output_path:str) -> None:
     end = time.time()
     logger.info(f"Time to load and generate equations: {end - start} seconds")
 
-    model = Gplearn(function_set=FUNCTION_SET, tournament_size=10, verbose=1)
-    config = ExperimentConfig("gplearn", data_path, output_path, "Tournament size=10")
+    model_with_config = get_model(model_name)
 
-    # model = DSR("configs/dsr_config.json")
-    # config = ExperimentConfig("dsr", data_path, "logs/", "Epochs=128")
+    model = model_with_config.model
+    config = model_with_config.config
 
-    # model = AIFeynman("add,sub,mul,div,sin,cos,exp,log", NN_epochs=1, max_time=60, BF_try_time=5)
-    # config = ExperimentConfig("AIF", data_path, "logs/", "Epochs=10")
-
-    # model = NeSymRes(
-    #     "configs/NeSymRes/100M.ckpt",
-    #     "configs/NeSymRes/config.yaml",
-    #     "configs/NeSymRes/eq_setting.json",
-    # )
-    # config = ExperimentConfig(
-    #     "NeSymRes", data_path, "logs/nguyen-12", "Beam size=2; BFGS Activated"
-    # )
+    config.dataset_path = data_path
+    config.results_path = output_path
 
     exp = ExperimentRunner(dataset, model, config)
 
-    # exp.run()
-    # exp.write_results()
+    exp.run()
+    exp.write_results()
 
 
 if __name__ == "__main__":
