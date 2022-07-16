@@ -41,5 +41,8 @@ clean:
 feynman:
 	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise)
 
+nguyen:
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/
+
 sanity_check:
 	python -m src.benchmark -d data/sanity_check/sanity_data.csv -n $(noise)

@@ -59,7 +59,7 @@ class ExperimentRunner:
             # self.model._model = self.model.init_model(
             # *self.model.args[0], **self.model.args[1]
             # )
-            # self.model._model = self.model.init_model()
+            self.model._model = self.model.init_model()
 
             # self.model._model = self.model.init_model(self.model.config_path)
 
@@ -96,7 +96,6 @@ class ExperimentRunner:
             f"{self.config.model_name}_noise-{self.dataset.noise}_{timestamp}.xlsx",
         )
 
-        # create result_path if it doesn't exist
         if not os.path.exists(self.config.results_path):
             os.makedirs(self.config.results_path)
 
@@ -151,7 +150,14 @@ def load_config(config_path: str):
     help="Gaussian noise to add to the data",
     default=0.0,
 )
-def main(data_path: str, noise: float) -> None:
+@click.option(
+    "--output-path",
+    "-o",
+    type=str,
+    help="Path to the output directory",
+    default="logs/",
+)
+def main(data_path: str, noise: float, output_path:str) -> None:
 
     start = time.time()
 
@@ -168,8 +174,8 @@ def main(data_path: str, noise: float) -> None:
     end = time.time()
     logger.info(f"Time to load and generate equations: {end - start} seconds")
 
-    # model = Gplearn(function_set=FUNCTION_SET, tournament_size=10, verbose=1)
-    # config = ExperimentConfig("gplearn", data_path, "logs/", "Tournament size=10")
+    model = Gplearn(function_set=FUNCTION_SET, tournament_size=10, verbose=1)
+    config = ExperimentConfig("gplearn", data_path, output_path, "Tournament size=10")
 
     # model = DSR("configs/dsr_config.json")
     # config = ExperimentConfig("dsr", data_path, "logs/", "Epochs=128")
@@ -177,19 +183,19 @@ def main(data_path: str, noise: float) -> None:
     # model = AIFeynman("add,sub,mul,div,sin,cos,exp,log", NN_epochs=1, max_time=60, BF_try_time=5)
     # config = ExperimentConfig("AIF", data_path, "logs/", "Epochs=10")
 
-    model = NeSymRes(
-        "configs/NeSymRes/100M.ckpt",
-        "configs/NeSymRes/config.yaml",
-        "configs/NeSymRes/eq_setting.json",
-    )
-    config = ExperimentConfig(
-        "NeSymRes", data_path, "logs/", "Beam size=2; BFGS Activated"
-    )
+    # model = NeSymRes(
+    #     "configs/NeSymRes/100M.ckpt",
+    #     "configs/NeSymRes/config.yaml",
+    #     "configs/NeSymRes/eq_setting.json",
+    # )
+    # config = ExperimentConfig(
+    #     "NeSymRes", data_path, "logs/nguyen-12", "Beam size=2; BFGS Activated"
+    # )
 
     exp = ExperimentRunner(dataset, model, config)
 
-    exp.run()
-    exp.write_results()
+    # exp.run()
+    # exp.write_results()
 
 
 if __name__ == "__main__":
