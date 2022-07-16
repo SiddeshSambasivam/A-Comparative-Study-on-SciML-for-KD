@@ -10,6 +10,7 @@ PROJECT_NAME = A-Comprehensive-Survey-on-SciML-for-KD
 PYTHON_INTERPRETER = python
 
 noise ?= 0.0
+num_points ?= 0
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -63,4 +64,4 @@ nguyen-nesymres:
 	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m nesymres
 
 sanity-check:
-	python -m src.benchmark -d data/sanity_check/sanity_data.csv -n $(noise) -o logs/sanity_check/ -m $(model)
+	python -m src.benchmark -d data/sanity_check/sanity_data.csv -n $(noise) -o logs/sanity_check/ -m $(model) -p $(num_points)

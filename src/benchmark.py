@@ -68,7 +68,7 @@ class ExperimentRunner:
             result = ExperimentResults(
                 model_name=self.config.model_name,
                 equation=equation.expr,
-                number_of_points=equation.number_of_points,
+                number_of_points=equation.number_of_points if self.dataset.num_points is None else self.dataset.num_points,
                 hyper_parameter=self.config.hyper_parameter,
             )
 
@@ -89,9 +89,14 @@ class ExperimentRunner:
         df = pd.DataFrame(data=self.logs)
 
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        if self.dataset.num_points is None:
+            num_points = "all"
+        else:
+            num_points = self.dataset.num_points
+
         results_path = os.path.join(
             self.config.results_path,
-            f"{self.config.model_name}_noise-{self.dataset.noise}_{timestamp}.xlsx",
+            f"{self.config.model_name}_noise-{self.dataset.noise}_pts-{num_points}_{timestamp}.xlsx",
         )
 
         if not os.path.exists(self.config.results_path):
@@ -118,7 +123,7 @@ def get_model(model_name: str) -> ModelWithConfig:
     """Loads the model with the given name."""
     if model_name == "gplearn":
         config = ExperimentConfig("gplearn", "Tournament size=10")
-        model = Gplearn(function_set=FUNCTION_SET, tournament_size=10, verbose=1)
+        model = Gplearn(function_set=FUNCTION_SET, tournament_size=10, verbose=0)
 
     elif model_name == "dsr":
         config = ExperimentConfig("dsr", "Epochs=128")
@@ -174,13 +179,20 @@ def load_config(config_path: str):
     default=0.0,
 )
 @click.option(
+    "--num-points",
+    "-p",
+    type=int,
+    help="Number of support points",
+    default=None,
+)
+@click.option(
     "--output-path",
     "-o",
     type=str,
     help="Path to the output directory",
     default="logs/",
 )
-def main(data_path: str, model_name: str, noise: float, output_path: str) -> None:
+def main(data_path: str, model_name: str, noise: float, num_points:int, output_path: str) -> None:
 
     start = time.time()
 
@@ -191,7 +203,10 @@ def main(data_path: str, model_name: str, noise: float, output_path: str) -> Non
         eq = create_equation(row["eq"], row["support"], row["num_points"])
         equations.append(eq)
 
-    dataset: List[Equation] = Dataset(equations, noise=noise)
+    if num_points == 0:
+        num_points = None
+
+    dataset: List[Equation] = Dataset(equations, noise=noise, num_points=num_points)
     dataset.generate_data()
 
     end = time.time()
