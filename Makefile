@@ -40,28 +40,28 @@ clean:
 	find . -type d -name "__pycache__" -delete
 
 feynman-aif:
-	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m aifeynman
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m aifeynman -p $(num_points)
 
 feynman-gpl:
-	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m gplearn
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m gplearn -p $(num_points)
 
 feynman-dsr:
-	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m dsr
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m dsr -p $(num_points)
 
 feynman-nesymres:
-	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m nesymres
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m nesymres -p $(num_points)
 
 nguyen-aif:
-	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m aifeynman
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m aifeynman -p $(num_points)
 
 nguyen-gpl:
-	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m gplearn
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m gplearn -p $(num_points)
 
 nguyen-dsr:
-	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m dsr
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m dsr -p $(num_points)
 
 nguyen-nesymres:
-	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m nesymres
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m nesymres -p $(num_points)
 
 sanity-check:
 	python -m src.benchmark -d data/sanity_check/sanity_data.csv -n $(noise) -o logs/sanity_check/ -m $(model) -p $(num_points)
