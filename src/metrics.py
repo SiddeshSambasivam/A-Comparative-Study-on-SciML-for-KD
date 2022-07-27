@@ -7,7 +7,7 @@ def compute_accuracy(
     """Compute accuracy of predictions"""
 
     closeness_to_truth = np.isclose(
-        y_true, y_pred, rtol=rtol, atol=atol, equal_nan=True
+        y_pred, y_true, rtol=rtol, atol=atol, equal_nan=True
     )
     accuracy = np.mean(closeness_to_truth)
 

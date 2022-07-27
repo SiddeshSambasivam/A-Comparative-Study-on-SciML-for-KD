@@ -51,9 +51,13 @@ class Dataset:
 
         input_data = []
         for var in eq.variables:
+
+            if self.num_points is None:
+                self.num_points = eq.number_of_points
+
             _max = eq.support[var]["max"]
             _min = eq.support[var]["min"]
-            input_data.append(np.random.uniform(_min, _max, eq.number_of_points))
+            input_data.append(np.random.uniform(_min, _max, self.num_points))
 
         x = np.stack(input_data, axis=1)
 
@@ -68,12 +72,10 @@ class Dataset:
             y = equation.code(*x.T)
 
             if self.num_points is None:
-                num_pts = self.num_points
-            else:
-                num_pts = equation.number_of_points
+                self.num_points = equation.number_of_points
 
-            generated_noise = np.random.normal(0, self.noise, num_pts)
-            y += generated_noise
+            generated_noise = np.random.normal(0, self.noise, x.shape)
+            x += generated_noise
 
             equation.x = x
             equation.y = y

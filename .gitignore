@@ -133,3 +133,7 @@ pkgs/
 
 # Model Checkpoints
 *.ckpt
+
+# Backups
+backup results
+logs

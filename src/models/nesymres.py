@@ -2,7 +2,6 @@ import json
 import logging
 from functools import partial
 from collections import namedtuple
-from sklearn.preprocessing import scale
 
 import torch
 import omegaconf

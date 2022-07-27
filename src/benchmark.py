@@ -89,18 +89,17 @@ class ExperimentRunner:
         df = pd.DataFrame(data=self.logs)
 
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        if self.dataset.num_points is None:
-            num_points = "all"
-        else:
-            num_points = self.dataset.num_points
-
+        num_points = self.dataset.num_points
+        
+        path = os.path.join(self.config.results_path, self.config.model_name)
+        
         results_path = os.path.join(
-            self.config.results_path,
+            path,
             f"{self.config.model_name}_noise-{self.dataset.noise}_pts-{num_points}_{timestamp}.xlsx",
         )
 
-        if not os.path.exists(self.config.results_path):
-            os.makedirs(self.config.results_path)
+        if not os.path.exists(path):
+            os.makedirs(path)
 
         self.write_to_excel(df, results_path)
 
