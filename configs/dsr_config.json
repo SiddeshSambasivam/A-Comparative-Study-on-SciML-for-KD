@@ -9,7 +9,7 @@
 
         "task_type" : "regression",
         
-        "function_set": ["add", "sub", "mul", "div", "sin", "cos", "exp", "log"],
+        "function_set": ["add", "sub", "mul", "div", "sin", "cos", "exp", "log", "sqrt"],
 
         "metric" : "inv_nrmse",
         "metric_params" : [1.0],

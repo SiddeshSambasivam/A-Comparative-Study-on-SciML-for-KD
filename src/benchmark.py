@@ -131,7 +131,7 @@ def get_model(model_name: str) -> ModelWithConfig:
     elif model_name == "aifeynman":
         config = ExperimentConfig("AIF", "Epochs=10")
         model = AIFeynman(
-            "add,sub,mul,div,sin,cos,exp,log", NN_epochs=1, max_time=60, BF_try_time=5
+            "add,sub,mul,div,sin,cos,exp,log,sqrt", NN_epochs=1, max_time=60, BF_try_time=5
         )
 
     elif model_name == "nesymres":
