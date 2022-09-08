@@ -48,6 +48,9 @@ feynman-gpl:
 feynman-dsr:
 	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m dsr -p $(num_points)
 
+feynman-dsr-gp:
+	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m dsr-gp -p $(num_points)
+
 feynman-nesymres:
 	python -m src.benchmark -d data/AIFeynman/feynman_03.csv -n $(noise) -o logs/Feynman-03 -m nesymres -p $(num_points)
 
@@ -59,6 +62,9 @@ nguyen-gpl:
 
 nguyen-dsr:
 	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m dsr -p $(num_points)
+
+nguyen-dsr-gp:
+	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m dsr-gp -p $(num_points)
 
 nguyen-nesymres:
 	python -m src.benchmark -d data/Nguyen-12/nguyen-12.csv -n $(noise) -o logs/nguyen-12/ -m nesymres -p $(num_points)

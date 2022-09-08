@@ -1,0 +1,94 @@
+{
+   "experiment" : {
+
+      "logdir" : "./log"
+   },
+
+   
+   "task" : {
+
+        "task_type" : "regression",
+        
+        "function_set": ["add", "sub", "mul", "div", "sin", "cos", "exp", "log", "sqrt"],
+
+        "metric" : "inv_nrmse",
+        "metric_params" : [1.0],
+
+        "extra_metric_test" : null,
+        "extra_metric_test_params" : [],
+
+        "threshold" : 1e-12,
+
+        "protected" : false,
+
+
+        "reward_noise" : 0.0,
+        "reward_noise_type" : "r",
+        "normalize_variance" : false,
+
+        "decision_tree_threshold_set" : []
+    },
+       
+    "training" : {
+      "n_samples": null,
+      "n_epochs": 8,
+      "epsilon" : 0.05,
+      "complexity": "token",
+      "const_optimizer": "scipy",
+      "const_params": {},
+      "n_cores_batch": 4      
+    },
+
+   "controller" : {
+      "learning_rate": 0.0025,
+      "entropy_weight" : 0.005,
+      "entropy_gamma" : 0.7
+   },
+  
+   "gp_meld" : {
+    "run_gp_meld" : true,
+    "verbose" : false,
+    "generations" : 20,
+    "p_crossover" : 0.5,
+    "p_mutate" : 0.5,
+    "tournament_size" : 5,
+    "train_n" : 50,
+    "mutate_tree_max" : 3    
+  },
+
+   "prior": {
+      "length" : {
+         "min_" : 4,
+         "max_" : 256,
+         "on" : true
+      },
+
+      "repeat" : {
+         "tokens" : "const",
+         "min_" : null,
+         "max_" : 10,
+         "on" : true
+      },
+      "inverse" : {
+         "on" : true
+      },
+      "trig" : {
+         "on" : true
+      },
+      "const" : {
+         "on" : true
+      },
+      "no_inputs" : {
+         "on" : true
+      },
+      "uniform_arity" : {
+         "on" : false
+      },
+      "soft_length" : {
+         "loc" : 10,
+         "scale" : 5,
+         "on" : true
+      }
+   }
+
+}

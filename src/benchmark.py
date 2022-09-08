@@ -1,10 +1,10 @@
-from collections import namedtuple
 import os
 import time
 import logging
 import datetime
 from typing import List, Type
 from dataclasses import dataclass, field
+from collections import namedtuple
 
 import click
 import pandas as pd
@@ -127,6 +127,10 @@ def get_model(model_name: str) -> ModelWithConfig:
     elif model_name == "dsr":
         config = ExperimentConfig("dsr", "Epochs=128")
         model = DSR("configs/dsr_config.json")
+    
+    elif model_name == "dsr-gp":
+        config = ExperimentConfig("dsr-gp", "Epochs=128")
+        model = DSR("configs/dsr_gp_config.json")        
 
     elif model_name == "aifeynman":
         config = ExperimentConfig("AIF", "Epochs=10")
