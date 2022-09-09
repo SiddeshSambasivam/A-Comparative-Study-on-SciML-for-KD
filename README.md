@@ -1,8 +1,19 @@
-## A Comparative Study on Machine Learning Algorithms for Knowledge Discovery
+# A Comparative Study on Machine Learning Algorithms for Knowledge Discovery
 
 This repository is the official implementation of **"A Comparative Study on Machine Learning Algorithms for Knowledge Discovery."**
 
 > :rocket: **Update:** The paper has been accepted for 17th International Conference on Control, Automation, Robotics and Vision (ICARCV 2022).
+
+#### **Table of Contents**
+
+[A. Requirements](#a-requirements)<br>
+[B. Dataset](#b-datasets)<br>
+[C. Baselines](#c-baselines)<br>
+[D. Benchmark](#d-benchmark)<br>
+[E. Results](#e-results)<br>
+[F. Citation](#f-citation)<br>
+
+**Overview:** The paper aims to summarize key research works in symbolic regression and perform a comparative study to understand the _strengths_ and _limitations_ of each method. Finally, we **highlight the challenges** in the current methods and future research directions in the application of machine learning in knowledge discovery.
 
 ### **A. Requirements**
 
@@ -18,19 +29,19 @@ conda env create -f environment.yml
 
 ### **B. Datasets**
 
-1. _Feynman-03:_ All equations with up to 3 input variables from the AI-Feynman dataset were sampled. The resulting dataset contained 52 equations.
+1. **_Feynman-03:_** All equations with up to `3 input variables` from the AI-Feynman dataset were sampled. The resulting dataset contained 52 equations.
 
-2. _Nguyen-12:_ The datasets consisted of 12 equations with a maximum of 2 input variables. It is important to highlight that few equations contain terms such as x^6 and x^5 which were included to test the methods’ ability to understand high-frequency terms.
+2. **_Nguyen-12:_** The datasets consisted of 12 equations with a maximum of `2 input variables`. It is important to highlight that few equations contain terms such as `x^6` and `x^5` which were included to test the methods’ ability to understand high-frequency terms.
 
 ### **C. Baselines**
 
-1. _Genetic programming (GPL)_: A python library called gplearn was used to perform genetic programming (GP).
+1. **_Genetic programming (GPL)_**: A python library called gplearn was used to perform genetic programming (GP).
 
-2. _Deep symbolic regression (DSR)_: An auto-regressive approach based on reinforcement learning search to optimize the symbolic search space. The opensource implementation of (Petersen et. el.) with default parameters was used for the benchmark tasks.
+2. **_Deep symbolic regression (DSR)_**: An auto-regressive approach based on reinforcement learning search to optimize the symbolic search space. The opensource implementation of (Petersen et. el.) with default parameters was used for the benchmark tasks.
 
-3. _AIFeynman (AIF)_: A heuristic based search approach that uses recurring patterns in symbolic formulas describing natural phenomena. A custom wrapper was written around the open-source python package, AIFeynman, for the evaluation.
+3. **_AIFeynman (AIF)_**: A heuristic based search approach that uses recurring patterns in symbolic formulas describing natural phenomena. A custom wrapper was written around the open-source python package, AIFeynman, for the evaluation.
 
-4. _Neural Symbolic Regression that Scales (NeSymRes)_: A symbolic language modelling approach that was pretrained on a large distribution of millions of equations. The pretrained model on 100 million equations was used for the benchmark.
+4. **_Neural Symbolic Regression that Scales (NeSymRes)_**: A symbolic language modelling approach that was pretrained on a large distribution of millions of equations. The pretrained model on 100 million equations was used for the benchmark.
 
 ### **D. Benchmark**
 
@@ -73,9 +84,9 @@ If you find this work useful in your research, please consider citing:
 @inproceedings{,
   title={A Comparative Study on Machine Learning Algorithms for Knowledge Discovery},
   author={Siddesh Sambasivam Suseela, Yang Feng, Kezhi Mao},
-  booktitle={},
+  booktitle={17th International Conference on Control, Automation, Robotics and Vision (ICARCV 2022)},
   year={2022},
-  organization={}
+  organization={Nanyang Technological University}
 }
 ```
 
