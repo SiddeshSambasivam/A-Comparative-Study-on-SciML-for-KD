@@ -18,6 +18,40 @@ class Equation:
     number_of_points: int
     code: Callable = None
 
+    def _generate_data_pts(self, number_of_points: int) -> np.ndarray:
+        """Generates data points for the given equation."""
+
+        input_data = []
+        for var in self.variables:
+
+            if number_of_points is not None:
+                self.number_of_points = number_of_points
+
+            _max = self.support[var]["max"]
+            _min = self.support[var]["min"]
+            input_data.append(np.random.uniform(_min, _max, self.number_of_points))
+
+        x = np.stack(input_data, axis=1)
+
+        return x
+
+    def get_data(self, noise:float, num_points:int=None) -> List[np.ndarray]:
+        """Returns the input and output data for the given equation."""
+        
+        x = self._generate_data_pts(number_of_points=num_points)
+
+        generated_noise = np.random.normal(0, noise, x.shape)
+        x += generated_noise
+
+        y = self.evaluate(x)
+
+        return x, y
+
+
+    def evaluate(self, x: np.ndarray) -> np.ndarray:
+        """Evaluates the equation for the given input data."""
+        return self.code(*x.T)
+
     def __post_init__(self):
         self.code = lambdify([*self.variables], expr=self.expr)
         self.x: np.ndarray = None
@@ -46,36 +80,16 @@ class Dataset:
     def evaluate_func(eq: Equation, X: np.ndarray):
         return eq.code(*X.T)
 
-    def _generate_data_pts(self, eq: Equation):
-        """Generates data points for the given equation."""
-
-        input_data = []
-        for var in eq.variables:
-
-            if self.num_points is None:
-                self.num_points = eq.number_of_points
-
-            _max = eq.support[var]["max"]
-            _min = eq.support[var]["min"]
-            input_data.append(np.random.uniform(_min, _max, self.num_points))
-
-        x = np.stack(input_data, axis=1)
-
-        return x
 
     def generate_data(self):
         """Generates data for each equation."""
 
         for equation in self.equations:
-            x = self._generate_data_pts(equation)
-
-            y = equation.code(*x.T)
+            
+            x,y = equation.get_data(self.noise, self.num_points)
 
             if self.num_points is None:
                 self.num_points = equation.number_of_points
-
-            generated_noise = np.random.normal(0, self.noise, x.shape)
-            x += generated_noise
 
             equation.x = x
             equation.y = y

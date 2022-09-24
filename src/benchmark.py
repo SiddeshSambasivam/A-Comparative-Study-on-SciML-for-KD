@@ -208,6 +208,8 @@ def main(data_path: str, model_name: str, noise: float, num_points:int, output_p
 
     if num_points == 0:
         num_points = None
+    
+    model_with_config = get_model(model_name)
 
     dataset: List[Equation] = Dataset(equations, noise=noise, num_points=num_points)
     dataset.generate_data()
@@ -215,7 +217,6 @@ def main(data_path: str, model_name: str, noise: float, num_points:int, output_p
     end = time.time()
     logger.info(f"Time to load and generate equations: {end - start} seconds")
 
-    model_with_config = get_model(model_name)
 
     model = model_with_config.model
     config = model_with_config.config
