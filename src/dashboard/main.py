@@ -15,15 +15,19 @@ def main():
         "This web app is a demo for the final year thesis, _[Scientific Machine Learning for Knowledge Discovery]()_ by **Siddesh Sambasivam Suseela**."
     )
 
-    alg_fam = st.sidebar.radio(
-        "Select the type of knowledge discovery algorithms",
-        ("Algebraic representation", "Differential representation"),
-    )
+    st.sidebar.write("### About the author")
+    # st.sidebar.write(
 
-    if alg_fam == "Algebraic representation":        
-        render_algebraic_page()
-    elif alg_fam == "Differential representation":        
-        render_differential_page()
+
+    # alg_fam = st.sidebar.radio(
+    #     "Select the type of knowledge discovery algorithms",
+    #     ("Algebraic representation", "Differential representation"),
+    # )
+
+    # if alg_fam == "Algebraic representation":        
+    render_algebraic_page()
+    # elif alg_fam == "Differential representation":        
+        # render_differential_page()
 
 
 if __name__ == "__main__":    

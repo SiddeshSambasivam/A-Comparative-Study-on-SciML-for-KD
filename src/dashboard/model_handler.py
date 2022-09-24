@@ -1,12 +1,15 @@
-from collections import namedtuple
+import streamlit as st
+
 from src.models.gplearn import Gplearn, FUNCTION_SET
 from src.models.dsr import DSR
 from src.models.aifeynman import AIFeynman
 from src.models.nesymres import NeSymRes
 
+
 def get_model(model_name: str):
     """Loads the model with the given name."""
-    if model_name == "gplearn":        
+
+    if model_name == "gplearn":               
         model = Gplearn(function_set=FUNCTION_SET, tournament_size=10, verbose=0)
 
     elif model_name == "dsr":
