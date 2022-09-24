@@ -71,3 +71,6 @@ nguyen-nesymres:
 
 sanity-check:
 	python -m src.benchmark -d data/sanity_check/sanity_data.csv -n $(noise) -o logs/sanity_check/ -m $(model) -p $(num_points)
+
+dash:
+	streamlit run src/dashboard/main.py
