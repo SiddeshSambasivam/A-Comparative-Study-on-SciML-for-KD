@@ -35,9 +35,9 @@ class Equation:
 
         return x
 
-    def get_data(self, noise:float, num_points:int=None) -> List[np.ndarray]:
+    def get_data(self, noise: float, num_points: int = None) -> List[np.ndarray]:
         """Returns the input and output data for the given equation."""
-        
+
         x = self._generate_data_pts(number_of_points=num_points)
 
         generated_noise = np.random.normal(0, noise, x.shape)
@@ -46,7 +46,6 @@ class Equation:
         y = self.evaluate(x)
 
         return x, y
-
 
     def evaluate(self, x: np.ndarray) -> np.ndarray:
         """Evaluates the equation for the given input data."""
@@ -80,13 +79,12 @@ class Dataset:
     def evaluate_func(eq: Equation, X: np.ndarray):
         return eq.code(*X.T)
 
-
     def generate_data(self):
         """Generates data for each equation."""
 
         for equation in self.equations:
-            
-            x,y = equation.get_data(self.noise, self.num_points)
+
+            x, y = equation.get_data(self.noise, self.num_points)
 
             if self.num_points is None:
                 self.num_points = equation.number_of_points

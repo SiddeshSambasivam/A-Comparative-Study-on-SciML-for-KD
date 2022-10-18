@@ -41,7 +41,7 @@ class Gplearn(BaseSymbolicModel):
         "sin": lambda x: sympy.sin(x),
         "cos": lambda x: sympy.cos(x),
         "neg": lambda x: -x,
-        "pow": lambda x, y: x ** y,
+        "pow": lambda x, y: x**y,
         "cos": lambda x: sympy.cos(x),
     }
 

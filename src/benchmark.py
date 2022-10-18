@@ -68,7 +68,9 @@ class ExperimentRunner:
             result = ExperimentResults(
                 model_name=self.config.model_name,
                 equation=equation.expr,
-                number_of_points=equation.number_of_points if self.dataset.num_points is None else self.dataset.num_points,
+                number_of_points=equation.number_of_points
+                if self.dataset.num_points is None
+                else self.dataset.num_points,
                 hyper_parameter=self.config.hyper_parameter,
             )
 
@@ -90,9 +92,9 @@ class ExperimentRunner:
 
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         num_points = self.dataset.num_points
-        
+
         path = os.path.join(self.config.results_path, self.config.model_name)
-        
+
         results_path = os.path.join(
             path,
             f"{self.config.model_name}_noise-{self.dataset.noise}_pts-{num_points}_{timestamp}.xlsx",
@@ -127,15 +129,18 @@ def get_model(model_name: str) -> ModelWithConfig:
     elif model_name == "dsr":
         config = ExperimentConfig("dsr", "Epochs=128")
         model = DSR("configs/dsr_config.json")
-    
+
     elif model_name == "dsr-gp":
         config = ExperimentConfig("dsr-gp", "Epochs=128")
-        model = DSR("configs/dsr_gp_config.json")        
+        model = DSR("configs/dsr_gp_config.json")
 
     elif model_name == "aifeynman":
         config = ExperimentConfig("AIF", "Epochs=10")
         model = AIFeynman(
-            "add,sub,mul,div,sin,cos,exp,log,sqrt", NN_epochs=1, max_time=60, BF_try_time=5
+            "add,sub,mul,div,sin,cos,exp,log,sqrt",
+            NN_epochs=1,
+            max_time=60,
+            BF_try_time=5,
         )
 
     elif model_name == "nesymres":
@@ -195,7 +200,9 @@ def load_config(config_path: str):
     help="Path to the output directory",
     default="logs/",
 )
-def main(data_path: str, model_name: str, noise: float, num_points:int, output_path: str) -> None:
+def main(
+    data_path: str, model_name: str, noise: float, num_points: int, output_path: str
+) -> None:
 
     start = time.time()
 
@@ -208,7 +215,7 @@ def main(data_path: str, model_name: str, noise: float, num_points:int, output_p
 
     if num_points == 0:
         num_points = None
-    
+
     model_with_config = get_model(model_name)
 
     dataset: List[Equation] = Dataset(equations, noise=noise, num_points=num_points)
@@ -216,7 +223,6 @@ def main(data_path: str, model_name: str, noise: float, num_points:int, output_p
 
     end = time.time()
     logger.info(f"Time to load and generate equations: {end - start} seconds")
-
 
     model = model_with_config.model
     config = model_with_config.config
